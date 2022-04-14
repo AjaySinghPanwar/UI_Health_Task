@@ -61,7 +61,7 @@ const Appointment = ({navigation}: drawerNavigationType) => {
           <TopBar
             left_image={images.burger_icon}
             title={stringConstants.appointment}
-            right_image={images.calender_icon}
+            right_image={images.calendar_icon}
             navigation={navigation}
           />
         </SafeAreaView>
@@ -269,7 +269,6 @@ const styles = StyleSheet.create({
 
   picker_styles: {
     width: '45%',
-    height: 52,
     backgroundColor: colors.primary_white,
     borderRadius: 16,
     borderWidth: 1,
@@ -305,7 +304,8 @@ const styles = StyleSheet.create({
     borderColor: '#E6E6E6',
     marginTop: 8,
     textAlignVertical: 'top',
-    padding: 16,
+    paddingTop: 16,
+    paddingLeft: 16,
   },
 });
 

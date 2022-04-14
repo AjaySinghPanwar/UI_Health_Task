@@ -2,7 +2,7 @@ export const images = {
   home_page_banner: require('../../assets/images/home_page_banner.png'),
   appointment_page_banner: require('../../assets/images/appointment_page_banner.png'),
   burger_icon: require('../../assets/images/burger_icon.png'),
-  calender_icon: require('../../assets/images/calender.png'),
+  calendar_icon: require('../../assets/images/calendar.png'),
   profile_image: require('../../assets/images/profile_image.png'),
   search_icon: require('../../assets/images/search_icon.png'),
   heart_icon: require('../../assets/images/heart_icon.png'),
