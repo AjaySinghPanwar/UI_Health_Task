@@ -26,4 +26,5 @@ export const stringConstants = {
   onboarding_title: 'Discover Top Doctors',
   onboarding_sub_title:
     'A team of professional doctors from many hospitals help you have the best healthcare experience wherever you are.',
+  other: 'other',
 };

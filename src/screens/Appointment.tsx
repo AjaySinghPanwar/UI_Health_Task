@@ -14,14 +14,18 @@ import {TextInput} from 'react-native-gesture-handler';
 import Button from '../components/Button';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import KeyboardAvoidingViewWrapper from '../components/KeyboardAvoidingViewWrapper';
+import TextComponent from '../components/TextComponent';
+import TextComponentBold from '../components/TextCompoentBold';
+import TextComponentMedium from '../components/TextComponentMedium';
 
 type drawerNavigationType = DrawerScreenProps<StackParamList, 'Appointment'>;
 
 const Appointment = ({navigation}: drawerNavigationType) => {
   const [weekDates, setWeekDates] = useState([]);
-  const [selectedDay, setSelectedDay] = useState(0);
-  const [selectedStartTime, setSelectedStartTime] = useState<any>('');
-  const [selectedEndTime, setSelectedEndTime] = useState<any>('');
+  const [selectedTime, setSelectedTime] = useState<any>({
+    start_time: '',
+    end_time: '',
+  });
   const [isStart, setIsStart] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isPickerVisibility, setIsPickerVisibility] = useState(false);
@@ -32,16 +36,23 @@ const Appointment = ({navigation}: drawerNavigationType) => {
     var days: any = [];
     var weekStart = currentDate.clone().startOf('isoWeek');
 
-    for (var i = 0; i <= 6; i++) {
+    for (var i = 0; i <= 5; i++) {
       days.push(moment(weekStart).add(i, 'days').format('D MMM'));
     }
-
     setWeekDates(days);
   };
 
   useEffect(() => {
     getCurrentWeek();
   }, []);
+
+  useEffect(() => {
+    weekDates.forEach((day: any, index: number) => {
+      if (day.split(' ')[0] === moment().format('DD')) {
+        setSelectedIndex(index);
+      }
+    });
+  }, [weekDates]);
 
   return (
     <KeyboardAvoidingViewWrapper>
@@ -54,91 +65,57 @@ const Appointment = ({navigation}: drawerNavigationType) => {
             navigation={navigation}
           />
         </SafeAreaView>
+
         <View style={styles.card}>
           <Image source={images.appointment_page_banner} />
         </View>
 
         <View style={styles.main_container}>
           <View style={styles.this_week_dates}>
-            <Text
-              style={{
-                fontFamily: fonts.primary_bold_font,
-                fontSize: 16,
-                lineHeight: 24,
-                textTransform: 'capitalize',
-                color: colors.screen_title_color,
-              }}>
-              {stringConstants.date}
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.primary_medium_font,
-                fontSize: 14,
-                lineHeight: 24,
-                textTransform: 'capitalize',
-                color: colors.blue,
-              }}>
-              {stringConstants.view_all}
-            </Text>
+            <TextComponentBold title={stringConstants.date} />
+            <TextComponentMedium title={stringConstants.other} />
           </View>
 
           <View style={styles.card_container}>
             {weekDates.map((day: any, index: number) => {
               return (
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedDay(day);
-                    setSelectedIndex(index);
-                  }}
+                <View
+                  style={
+                    selectedIndex === index
+                      ? styles.dates_card_selected
+                      : styles.dates_card
+                  }
                   key={index}>
-                  <View
-                    style={
+                  <TextComponent
+                    fontFamily={fonts.primary_bold_font}
+                    fontSize={14}
+                    lineHeight={24}
+                    color={
                       selectedIndex === index
-                        ? styles.dates_card_selected
-                        : styles.dates_card
+                        ? colors.primary_white
+                        : colors.desc_color
                     }>
-                    <Text
-                      style={{
-                        fontFamily: fonts.primary_bold_font,
-                        fontSize: 14,
-                        lineHeight: 24,
-                        color:
-                          selectedIndex === index
-                            ? colors.primary_white
-                            : colors.desc_color,
-                      }}>
-                      {day.split(' ')[0]}
-                    </Text>
-                    <Text
-                      style={{
-                        fontFamily: fonts.primary_regular_font,
-                        fontSize: 12,
-                        lineHeight: 24,
-                        color:
-                          selectedIndex === index
-                            ? colors.primary_white
-                            : colors.desc_color,
-                      }}>
-                      {day.split(' ')[1]}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+                    {day.split(' ')[0]}
+                  </TextComponent>
+                  <TextComponent
+                    fontFamily={fonts.primary_regular_font}
+                    fontSize={12}
+                    lineHeight={24}
+                    color={
+                      selectedIndex === index
+                        ? colors.primary_white
+                        : colors.desc_color
+                    }>
+                    {day.split(' ')[1]}
+                  </TextComponent>
+                </View>
               );
             })}
           </View>
         </View>
 
-        <View style={styles.main_container}>
-          <Text
-            style={{
-              fontFamily: fonts.primary_bold_font,
-              fontSize: 16,
-              lineHeight: 24,
-              textTransform: 'capitalize',
-              color: colors.screen_title_color,
-            }}>
-            {stringConstants.schedule}
-          </Text>
+        <View style={[styles.main_container, {marginTop: 16}]}>
+          <TextComponentBold title={stringConstants.schedule} />
 
           <View style={styles.picker_main_container}>
             <TouchableOpacity
@@ -147,16 +124,12 @@ const Appointment = ({navigation}: drawerNavigationType) => {
                 setIsPickerVisibility(true);
                 setIsStart(true);
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                }}>
-                {selectedStartTime !== '' ? (
+              <View style={styles.picker_inner_styles}>
+                {selectedTime.start_time !== '' ? (
                   <>
-                    <Text style={styles.pickerText}>{selectedStartTime}</Text>
+                    <Text style={styles.pickerText}>
+                      {selectedTime.start_time}
+                    </Text>
                     <Image source={images.down_arrow} />
                   </>
                 ) : (
@@ -175,22 +148,18 @@ const Appointment = ({navigation}: drawerNavigationType) => {
                 setIsPickerVisibility(true);
                 setIsStart(false);
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  width: '100%',
-                }}>
-                {selectedEndTime !== '' ? (
+              <View style={styles.picker_inner_styles}>
+                {selectedTime.end_time !== '' ? (
                   <>
-                    <Text style={styles.pickerText}>{selectedEndTime}</Text>
+                    <Text style={styles.pickerText}>
+                      {selectedTime.end_time}
+                    </Text>
                     <Image source={images.down_arrow} />
                   </>
                 ) : (
                   <>
                     <Text style={styles.pickerText}>
-                      {stringConstants.start_time}
+                      {stringConstants.end_time}
                     </Text>
                     <Image source={images.down_arrow} />
                   </>
@@ -200,18 +169,8 @@ const Appointment = ({navigation}: drawerNavigationType) => {
           </View>
         </View>
 
-        <View style={styles.main_container}>
-          <Text
-            style={{
-              fontFamily: fonts.primary_bold_font,
-              fontSize: 16,
-              lineHeight: 24,
-              textTransform: 'capitalize',
-              color: colors.screen_title_color,
-            }}>
-            {stringConstants.complaint}
-          </Text>
-
+        <View style={[styles.main_container, {marginTop: 16}]}>
+          <TextComponentBold title={stringConstants.complaint} />
           <TextInput
             style={styles.complaint_box}
             placeholder={stringConstants.complaint_text}
@@ -228,9 +187,14 @@ const Appointment = ({navigation}: drawerNavigationType) => {
           mode="time"
           onConfirm={time => {
             isStart
-              ? setSelectedStartTime(time.toLocaleTimeString())
-              : setSelectedEndTime(time.toLocaleTimeString());
-
+              ? setSelectedTime({
+                  ...selectedTime,
+                  start_time: time.toLocaleTimeString(),
+                })
+              : setSelectedTime({
+                  ...selectedTime,
+                  end_time: time.toLocaleTimeString(),
+                });
             setIsPickerVisibility(false);
           }}
           onCancel={() => {
@@ -247,7 +211,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.primary_white,
     paddingHorizontal: 24,
-    paddingVertical: 42,
+    paddingVertical: 30,
   },
 
   card: {
@@ -275,23 +239,23 @@ const styles = StyleSheet.create({
   },
 
   dates_card: {
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: 44,
     height: 56,
-    paddingHorizontal: 4,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
     borderRadius: 12,
     backgroundColor: '#F9F9F9',
   },
 
   dates_card_selected: {
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
     width: 44,
     height: 56,
-    paddingHorizontal: 4,
-    paddingVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
     borderRadius: 12,
     backgroundColor: colors.blue,
   },
@@ -315,6 +279,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 14,
     paddingHorizontal: 16,
+  },
+
+  picker_inner_styles: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
   },
 
   pickerText: {

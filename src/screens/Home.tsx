@@ -1,3 +1,4 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 import {DrawerScreenProps} from '@react-navigation/drawer';
 import React from 'react';
@@ -9,8 +10,11 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import TextComponentBold from '../components/TextCompoentBold';
+import TextComponentMedium from '../components/TextComponentMedium';
 import TopBar from '../components/TopBar';
 import {images} from '../utils/constants/assets';
 import {colors} from '../utils/constants/colors';
@@ -23,62 +27,48 @@ type drawerNavigationType = DrawerScreenProps<StackParamList, 'Home'>;
 
 const Home = ({navigation}: drawerNavigationType) => {
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <TopBar
-          left_image={images.burger_icon}
-          title=""
-          right_image={images.profile_image}
-          navigation={navigation}
-        />
-      </SafeAreaView>
-      <View style={styles.card}>
-        <Text style={styles.hello_text}>
-          {stringConstants.homeCardhelloText}
-        </Text>
-        <Text style={styles.card_title}>
-          {stringConstants.homeCarddDescText}
-        </Text>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{paddingBottom: 100}}>
+      <View style={styles.container}>
+        <SafeAreaView>
+          <TopBar
+            left_image={images.burger_icon}
+            title=""
+            right_image={images.profile_image}
+            navigation={navigation}
+          />
+        </SafeAreaView>
+        <View style={styles.card}>
+          <Text style={styles.hello_text}>
+            {stringConstants.homeCardhelloText}
+          </Text>
+          <Text style={styles.card_title}>
+            {stringConstants.homeCarddDescText}
+          </Text>
 
-        <ImageBackground
-          source={images.home_page_banner}
-          resizeMode="cover"
-          style={styles.image}
-        />
-      </View>
-      <View style={styles.search_input_container}>
-        <Image
-          source={images.search_icon}
-          style={{position: 'absolute', marginLeft: 16, marginVertical: 14}}
-        />
-        <Text style={styles.search_input_title}>{stringConstants.search}</Text>
-      </View>
+          <ImageBackground
+            source={images.home_page_banner}
+            resizeMode="cover"
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.search_input_container}>
+          <TouchableOpacity>
+            <Image
+              source={images.search_icon}
+              style={{position: 'absolute', marginLeft: 16, marginVertical: 14}}
+            />
+          </TouchableOpacity>
+          <TextInput
+            style={styles.search_input_title}
+            placeholder={stringConstants.search}></TextInput>
+        </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: 100}}>
         <View style={styles.services_main_container}>
           <View style={styles.services_title}>
-            <Text
-              style={{
-                fontFamily: fonts.primary_bold_font,
-                fontSize: 16,
-                lineHeight: 24,
-                textTransform: 'capitalize',
-                color: colors.screen_title_color,
-              }}>
-              {stringConstants.our_service}
-            </Text>
-            <Text
-              style={{
-                fontFamily: fonts.primary_medium_font,
-                fontSize: 14,
-                lineHeight: 24,
-                textTransform: 'capitalize',
-                color: colors.blue,
-              }}>
-              {stringConstants.view_all}
-            </Text>
+            <TextComponentBold title={stringConstants.our_service} />
+            <TextComponentMedium title={stringConstants.view_all} />
           </View>
           <View style={styles.services_card_container}>
             {servicesData.map((service, index: number) => {
@@ -99,26 +89,8 @@ const Home = ({navigation}: drawerNavigationType) => {
         <SafeAreaView>
           <View style={styles.services_main_container}>
             <View style={styles.services_title}>
-              <Text
-                style={{
-                  fontFamily: fonts.primary_bold_font,
-                  fontSize: 16,
-                  lineHeight: 24,
-                  textTransform: 'capitalize',
-                  color: colors.screen_title_color,
-                }}>
-                {stringConstants.our_package}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: fonts.primary_medium_font,
-                  fontSize: 14,
-                  lineHeight: 24,
-                  textTransform: 'capitalize',
-                  color: colors.blue,
-                }}>
-                {stringConstants.view_all}
-              </Text>
+              <TextComponentBold title={stringConstants.our_package} />
+              <TextComponentMedium title={stringConstants.view_all} />
             </View>
             <View style={styles.services_card_container}>
               {packageData.map((item, index: number) => {
@@ -145,8 +117,8 @@ const Home = ({navigation}: drawerNavigationType) => {
             </View>
           </View>
         </SafeAreaView>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -154,7 +126,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 42,
+    paddingTop: 30,
   },
 
   card: {
@@ -191,9 +163,8 @@ const styles = StyleSheet.create({
   },
 
   search_input_title: {
-    position: 'absolute',
+    height: 52,
     marginLeft: 52,
-    marginTop: 16,
     marginBottom: 17,
     textTransform: 'capitalize',
     fontFamily: fonts.primary_semi_bold_font,
