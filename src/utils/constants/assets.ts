@@ -1,0 +1,17 @@
+export const images = {
+  home_page_banner: require('../../assets/images/home_page_banner.png'),
+  appointment_page_banner: require('../../assets/images/appointment_page_banner.png'),
+  burger_icon: require('../../assets/images/burger_icon.png'),
+  calender_icon: require('../../assets/images/calender.png'),
+  profile_image: require('../../assets/images/profile_image.png'),
+  search_icon: require('../../assets/images/search_icon.png'),
+  heart_icon: require('../../assets/images/heart_icon.png'),
+  vaccine_icon: require('../../assets/images/vaccine_icon.png'),
+  tooth_icon: require('../../assets/images/tooth_icon.png'),
+  medicine_icon: require('../../assets/images/medicine_icon.png'),
+  consultant_doc_image: require('../../assets/images/consultant_doc_image.png'),
+  tooth_doc_image: require('../../assets/images/tooth_doc_image.png'),
+  down_arrow: require('../../assets/images/down_arrow.png'),
+  onboarding_image_one: require('../../assets/images/onboarding_image_one.png'),
+  slider: require('../../assets/images/slider.png'),
+};
