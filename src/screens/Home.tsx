@@ -261,14 +261,14 @@ const styles = StyleSheet.create({
   packages_title: {
     fontFamily: fonts.primary_semi_bold_font,
     color: colors.screen_title_color,
-    fontSize: 14,
+    fontSize: 13,
     lineHeight: 24,
   },
 
   packages_subtitle: {
     fontFamily: fonts.primary_semi_bold_font,
     color: colors.desc_color,
-    fontSize: 12,
+    fontSize: 11,
     lineHeight: 16,
   },
 });

@@ -92,7 +92,7 @@ const OnboardingScreen = ({navigation}: any) => {
       <View style={{marginTop: 43, marginBottom: 60}}>
         <Button
           title={stringConstants.next}
-          width={152}
+          width={155}
           height={52}
           onPress={() => {
             scrollTo();
