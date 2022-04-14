@@ -79,7 +79,7 @@ const OnboardingScreen = ({navigation}: any) => {
 
       <Paginator data={slides} scrollX={scrollX} />
 
-      <View style={{marginTop: 43, marginBottom: 60}}>
+      <View style={{marginVertical: 43}}>
         <Button
           title={stringConstants.next}
           width={155}
