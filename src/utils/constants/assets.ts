@@ -14,4 +14,6 @@ export const images = {
   down_arrow: require('../../assets/images/down_arrow.png'),
   onboarding_image_one: require('../../assets/images/onboarding_image_one.png'),
   slider: require('../../assets/images/slider.png'),
+  arrow_left: require('../../assets/images/arrow_left.png'),
+  arrow_right: require('../../assets/images/arrow_right.png'),
 };

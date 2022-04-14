@@ -17,8 +17,11 @@ import KeyboardAvoidingViewWrapper from '../components/KeyboardAvoidingViewWrapp
 import TextComponent from '../components/TextComponent';
 import TextComponentBold from '../components/TextCompoentBold';
 import TextComponentMedium from '../components/TextComponentMedium';
+import DateController from '../components/DateController';
 
 type drawerNavigationType = DrawerScreenProps<StackParamList, 'Appointment'>;
+
+let controller = 0;
 
 const Appointment = ({navigation}: drawerNavigationType) => {
   const [weekDates, setWeekDates] = useState([]);
@@ -27,17 +30,54 @@ const Appointment = ({navigation}: drawerNavigationType) => {
     end_time: '',
   });
   const [isStart, setIsStart] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isPickerVisibility, setIsPickerVisibility] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<any>('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const getCurrentWeek = () => {
-    var currentDate = moment();
+    let currentDate = moment();
 
-    var days: any = [];
-    var weekStart = currentDate.clone().startOf('isoWeek');
+    let days: any = [];
+    let weekStart = currentDate.clone().startOf('isoWeek');
 
-    for (var i = 0; i <= 5; i++) {
-      days.push(moment(weekStart).add(i, 'days').format('D MMM'));
+    for (let i = 0; i <= 5; i++) {
+      days.push(moment(weekStart).add(i, 'days').format('D MMM YYYY'));
+    }
+    setWeekDates(days);
+  };
+
+  const getNextWeek = () => {
+    controller = controller + 6;
+
+    let currentDate = moment();
+
+    let days: any = [];
+    let weekStart = currentDate.clone().startOf('isoWeek');
+
+    for (let i = 0; i <= 5; i++) {
+      days.push(
+        moment(weekStart)
+          .add(i + controller, 'days')
+          .format('D MMM YYYY'),
+      );
+    }
+    setWeekDates(days);
+  };
+
+  const getPrevWeek = () => {
+    controller = controller - 6;
+
+    let currentDate = moment();
+
+    let days: any = [];
+    let weekStart = currentDate.clone().startOf('isoWeek');
+
+    for (let i = 0; i <= 5; i++) {
+      days.push(
+        moment(weekStart)
+          .add(i + controller, 'days')
+          .format('D MMM YYYY'),
+      );
     }
     setWeekDates(days);
   };
@@ -47,11 +87,12 @@ const Appointment = ({navigation}: drawerNavigationType) => {
   }, []);
 
   useEffect(() => {
-    weekDates.forEach((day: any, index: number) => {
-      if (day.split(' ')[0] === moment().format('DD')) {
-        setSelectedIndex(index);
+    weekDates.forEach((day: any) => {
+      if (day === moment().format('D MMM YYYY')) {
+        setSelectedDate(day);
       }
     });
+    setIsLoading(false);
   }, [weekDates]);
 
   return (
@@ -76,22 +117,29 @@ const Appointment = ({navigation}: drawerNavigationType) => {
             <TextComponentMedium title={stringConstants.other} />
           </View>
 
+          <DateController
+            isLoading={isLoading}
+            selectedDate={selectedDate}
+            getNextWeek={getNextWeek}
+            getPrevWeek={getPrevWeek}
+          />
+
           <View style={styles.card_container}>
             {weekDates.map((day: any, index: number) => {
               return (
                 <View
                   style={
-                    selectedIndex === index
+                    selectedDate === day
                       ? styles.dates_card_selected
                       : styles.dates_card
                   }
                   key={index}>
                   <TextComponent
                     fontFamily={fonts.primary_bold_font}
-                    fontSize={14}
+                    fontSize={12}
                     lineHeight={24}
                     color={
-                      selectedIndex === index
+                      selectedDate === day
                         ? colors.primary_white
                         : colors.desc_color
                     }>
@@ -102,7 +150,7 @@ const Appointment = ({navigation}: drawerNavigationType) => {
                     fontSize={12}
                     lineHeight={24}
                     color={
-                      selectedIndex === index
+                      selectedDate === day
                         ? colors.primary_white
                         : colors.desc_color
                     }>
@@ -241,7 +289,7 @@ const styles = StyleSheet.create({
   dates_card: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: 44,
+    width: 50,
     height: 56,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -252,7 +300,7 @@ const styles = StyleSheet.create({
   dates_card_selected: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: 44,
+    width: 46,
     height: 56,
     paddingHorizontal: 12,
     paddingVertical: 4,
