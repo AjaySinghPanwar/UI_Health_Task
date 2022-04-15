@@ -26,7 +26,9 @@ const DateController = (props: any) => {
           fontSize={12}
           lineHeight={24}
           color={colors.screen_title_color}>
-          {props.selectedDate.split(' ')[0] + props.selectedDate.split(' ')[1]}
+          {props.selectedDate.split(' ')[0] +
+            ' ' +
+            props.selectedDate.split(' ')[1]}
         </TextComponent>
       )}
 
